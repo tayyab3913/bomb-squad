@@ -8,8 +8,9 @@ public class PlayerController : MonoBehaviour
     public float horizontalInput;
     public float verticalInput;
     public Vector3 throwDirection;
-    private Rigidbody playerRb;
+    public Rigidbody playerRb;
     private PowerScript powerScriptReference;
+    private RagDoll ragDollReference;
     public GameManager gameManagerReference;
     private Vector3 haltPlayer = new Vector3(0, 0, 0);
     // Start is called before the first frame update
@@ -19,6 +20,8 @@ public class PlayerController : MonoBehaviour
         powerScriptReference = GetComponent<PowerScript>();
         powerScriptReference.SetPlayerReference(this);
         powerScriptReference.SetHealth(3);
+        ragDollReference = GetComponent<RagDoll>();
+        ragDollReference.SetPlayerReference(this);
     }
 
     // Update is called once per frame

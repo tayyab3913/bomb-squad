@@ -10,10 +10,11 @@ public class Enemy : MonoBehaviour
     private float attackRange = 8;
     private Vector3 previousPosition;
     private Vector3 throwDirection;
-    private Rigidbody enemyRb;
+    public Rigidbody enemyRb;
     private Vector3 movementDirection;
     public GameManager gameManagerReference;
     private PowerScript powerScriptReference;
+    private RagDoll ragDollReference;
     private Vector3 haltEnemy = new Vector3(0, 0, 0);
     // Start is called before the first frame update
     void Start()
@@ -21,7 +22,10 @@ public class Enemy : MonoBehaviour
         enemyRb = GetComponent<Rigidbody>();
         powerScriptReference = GetComponent<PowerScript>();
         powerScriptReference.SetEnemyReference(this);
-        powerScriptReference.SetHealth(Random.Range(1, 3));
+        //powerScriptReference.SetHealth(Random.Range(1, 3));
+        powerScriptReference.SetHealth(1);
+        ragDollReference = GetComponent<RagDoll>();
+        ragDollReference.SetEnemyReference(this);
     }
 
     // Update is called once per frame

@@ -20,12 +20,15 @@ public class PowerScript : MonoBehaviour
     public bool hasNoAbility = true;
     private Enemy enemyReference;
     private PlayerController playerControllerReference;
+    public RagDoll ragDollReference;
     private bool isEnemyCouroutineCalled;
     private int specialBombsInHand = 3;
     private Vector3 halt = new Vector3(0, 0, 0);
     // Start is called before the first frame update
     void Start()
     {
+        ragDollReference = GetComponent<RagDoll>();
+        ragDollReference.SetPowerScriptReference(this);
         if (gameObject.CompareTag("Enemy"))
         {
             StartCoroutine(EnemyBombThrow());
@@ -35,10 +38,10 @@ public class PowerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(gameObject.CompareTag("Player"))
+        if(gameObject.CompareTag("Player") && health > 0)
         {
             UserControllerBombThrow();
-        } else if (gameObject.CompareTag("Enemy") && isEnemyCouroutineCalled)
+        } else if (gameObject.CompareTag("Enemy") && isEnemyCouroutineCalled && health > 0)
         {
             StartCoroutine(EnemyBombThrow());
             isEnemyCouroutineCalled = false;
@@ -105,7 +108,7 @@ public class PowerScript : MonoBehaviour
     IEnumerator EnemyBombThrow()
     {
         yield return new WaitForSeconds(4);
-        if(enemyReference.playerReference != null)
+        if(enemyReference.playerReference != null && health > 0)
         {
             enemyReference.HaltEnemy();
             InstantiateEnemyBomb();
@@ -135,7 +138,12 @@ public class PowerScript : MonoBehaviour
         if(health<1)
         {
             enemyReference.gameManagerReference.RemoveEnemyFromEnemiesAlive(gameObject);
-            Destroy(gameObject);
+            enemyReference.enemyRb.constraints = RigidbodyConstraints.None;
+            if (ragDollReference != null)
+            {
+                ragDollReference.DeathHasHappened();
+            }
+            //Destroy(gameObject);
         }
     }
 
@@ -143,7 +151,12 @@ public class PowerScript : MonoBehaviour
     {
         if (health < 1)
         {
-            Destroy(gameObject);
+            playerControllerReference.playerRb.constraints = RigidbodyConstraints.None;
+            if (ragDollReference != null)
+            {
+                ragDollReference.DeathHasHappened();
+            }
+            //Destroy(gameObject);
         }
     }
     

@@ -33,15 +33,21 @@ public class Bomb : MonoBehaviour
         foreach (Collider inRangeObject in colliders)
         {
             Rigidbody tempRb = inRangeObject.GetComponent<Rigidbody>();
-            if(tempRb != null)
+            PowerScript tempPowerScript = inRangeObject.GetComponent<PowerScript>();
+            RagDoll tempRagDoll = inRangeObject.GetComponent<RagDoll>();
+            if (tempRb != null)
             {
+                //tempRb.constraints = RigidbodyConstraints.None;
+                //if (tempRagDoll != null)
+                //{
+                //    tempRagDoll.DeathHasHappened();
+                //}
                 tempRb.AddExplosionForce(blastForce, blastPoint, blastRadius);
             }
-            PowerScript tempPowerScript = inRangeObject.GetComponent<PowerScript>();
-            if(tempPowerScript != null)
+            if (tempPowerScript != null)
             {
                 tempPowerScript.GetDamage();
-            }  
+            }
         }
     }
 }
